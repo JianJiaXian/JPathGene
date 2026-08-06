@@ -166,11 +166,7 @@ gene-only, and concatenation fusion.*
 
 ## Paper
 
-Camera-ready LaTeX lives in `paper/` (Springer LNCS). Build:
 
-```bash
-cd paper && bash build.sh          # -> main.pdf
-```
 
 ## Notes
 
