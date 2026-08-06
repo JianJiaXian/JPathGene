@@ -50,7 +50,6 @@ scripts/        data prep + figure/table generators, WSI patch utilities
 run_jepa_pretrain.py  run_downstream.py  run_crossval_compare.py  run_qualitative.py
 run_ablation.py  run_alignment_analysis.py  run_gene_prediction_analysis.py
 train.py  evaluate.py  extract_features.py  measure_efficiency.py
-paper/          camera-ready LaTeX source (Springer LNCS)
 assets/         figures used in this README
 ```
 
