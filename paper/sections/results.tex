@@ -1,0 +1,52 @@
+\subsection{TCGA-BRCA results and ablation}
+\label{sec:uni}
+Among fourteen evaluated methods (Table~\ref{tab:uni_compare}), JPathGene
+achieves the highest multimodal AUC and matches gene-only
+($0.954$ vs.\ $0.954$; n.s.), while substantially reducing ECE relative to
+gene-only ($0.094$ vs.\ $0.229$, $p\!<\!0.001$). This benefit is feature-dependent: with generic $2048$-dimensional ResNet-50
+features the ordering reverses -- simple early and gated fusion lead (AUC $0.94$)
+while JPathGene and gene-only trail ($\approx\!0.91$) -- and only with UNI2-h does
+cross-modal learning reach the top. On pooled BRCA out-of-fold predictions,
+JPathGene changes $26\%$ of gene-only decisions at the $0.5$ threshold and shifts
+predicted probabilities by more than $0.10$ for $82\%$ of patients. Full has
+lower F1 because its conservative probabilities reduce recall at the fixed
+$0.5$ threshold, whereas CoRE recovers F1 through the gene anchor at the cost
+of higher ECE. The variants therefore trade calibration against thresholded
+classification performance.
+
+\input{tables/uni_comparison.tex}
+\paragraph{Calibration.}
+\label{sec:calib}
+Because ECE is binning-sensitive, we additionally report Brier score and NLL
+(Table~\ref{tab:calibration}). JPathGene attains the lowest Brier score ($0.089$)
+and NLL ($0.276$), compared with $0.147$ and $0.463$ for gene-only, indicating
+better probabilistic predictions beyond bin-based calibration.
+
+\input{tables/calibration.tex}
+\paragraph{Ablation.}
+A $2^4$ factorial ablation identifies the gene anchor as the dominant component,
+with anchored configurations reaching AUC $0.94$--$0.96$ versus
+$0.84$--$0.92$ without it. Masked and cross-modal JEPA reduce variance,
+whereas contrastive alignment adds little benefit.
+
+\subsection{TCGA-LUAD validation}
+\label{sec:luad}
+We further evaluate JPathGene on TCGA-LUAD
+(Table~\ref{tab:luad_combined}). For TP53 mutation, CoRE significantly
+outperforms gene-only in both AUC ($0.793$ vs.\ $0.774$, $p\!=\!0.028$)
+and calibration ($p\!=\!0.041$). For stage classification, all multimodal
+methods improve AUC by $0.07$--$0.11$ over gene-only ($p\!<\!0.001$),
+indicating complementary histologic information. The gate therefore adjusts
+the image contribution according to cross-modal reliability.
+Figure~\ref{fig:qualitative} shows held-out cases recovered by JPathGene when
+the unimodal and concatenation models fail.
+
+\input{tables/luad_combined.tex}
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figures/fig3.pdf}
+    \caption{\textbf{LUAD-stage examples.} JPathGene correctly classifies
+held-out cases missed by image-only, gene-only, and concatenation fusion.}
+    \label{fig:qualitative}
+\end{figure}

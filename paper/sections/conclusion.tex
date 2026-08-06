@@ -1,0 +1,13 @@
+\FloatBarrier
+\section{Conclusion}
+\label{sec:conclusion}
+
+JPathGene formulates histopathology--genomics fusion as bidirectional latent
+diffusion prediction and uses sample-based uncertainty to gate an image residual
+over a genomic anchor. Its benefit depends on feature quality and endpoint type,
+matching gene-only on TCGA-BRCA, outperforming it on LUAD-TP53, and improving
+LUAD-stage AUC by $0.08$--$0.09$. Unlike evidential or Dempster--Shafer fusion
+\cite{sensoy2018evidential,han2021trusted}, CoRE uses cross-modal sampling
+variance to adapt the per-patient image-residual weight. Current limitations include pre-extracted features, approximate gene
+targets, additional sampling, and the need for clinical validation. Future work
+will study larger pan-cancer cohorts and spatially resolved molecular targets.

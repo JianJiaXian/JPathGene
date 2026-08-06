@@ -1,0 +1,85 @@
+# JPathGene — default feature-level configuration.
+# Points at a fully-aligned feature-level demo (image + gene + label CSVs) so the
+# whole pipeline is runnable end-to-end. Swap `data.root` for a real cohort
+# (e.g. configs/tcga_brca.yaml) once matched CSVs are in place.
+seed: 42
+device: cuda            # falls back to cpu automatically if no GPU is visible
+
+data:
+  name: feature_demo
+  root: data/FEATURE_CSV
+  image_features: image_features.csv
+  gene_features: genomic_features.csv   # loader also accepts gene_features.csv
+  labels: labels.csv
+  clinical: clinical.csv                # optional; set null to disable
+  splits: splits.csv                    # optional; null -> deterministic split
+  use_clinical: false
+  normalize: standard                   # standard | minmax | none
+  split_ratios: [0.7, 0.15, 0.15]
+  gene_pca:
+    enabled: false                      # if true, gene features are PCA-reduced
+    n_components: 32
+
+task:
+  type: binary                          # binary | multiclass
+  num_classes: 2
+
+model:
+  image_encoder:
+    hidden_dims: [512, 256]
+    latent_dim: 128
+    dropout: 0.2
+    mil: false                          # attention-pool multiple patches/patient
+  gene_encoder:
+    type: mlp                           # mlp | tabtransformer
+    hidden_dims: [256, 128]
+    latent_dim: 128
+    dropout: 0.2
+  target:
+    gene_target_type: learned           # learned | pca | pathway
+    target_dim: 128
+    ema: true                           # EMA target encoders (JEPA-style)
+    ema_decay: 0.996
+  predictor:
+    type: diffusion                     # diffusion | mlp
+    hidden_dim: 256
+    residual: true                      # (mlp predictor only)
+    timesteps: 1000                     # diffusion training steps
+    sample_steps: 8                     # DDIM steps at inference
+    depth: 3                            # denoiser residual blocks
+    n_uncertainty_samples: 8            # samples for posterior mean + uncertainty
+    masked_jepa: true                   # within-modality masked latent prediction (I-JEPA)
+    mask_ratio: 0.5                     # fraction of features masked to form context
+  fusion:
+    mode: uncertainty_gated             # uncertainty_gated | pathgene_jepa | concat | gated | cross_attention
+    hidden_dim: 256
+    dropout: 0.3
+
+jepa:
+  distance: cosine                      # cosine | smooth_l1
+
+loss:
+  lambda_img2gene: 1.0
+  lambda_gene2img: 1.0
+  lambda_masked_jepa: 0.5               # within-modality masked latent prediction
+  lambda_align: 0.1
+  lambda_cls: 1.0
+  use_contrastive: true
+  contrastive_temp: 0.1
+
+train:
+  epochs: 100
+  batch_size: 64
+  lr: 0.001
+  weight_decay: 0.0001
+  scheduler: cosine                     # cosine | none
+  warmup_epochs: 5
+  amp: true
+  num_workers: 4
+  patience: 30
+
+downstream:
+  mode: finetune                        # linear_probe | finetune
+  epochs: 80
+  lr: 0.0005
+  weight_decay: 0.0001

@@ -1,0 +1,86 @@
+# JPathGene — TCGA-BRCA feature-level configuration.
+# Pre-extracted ResNet WSI features (img_*) + RNA-seq genomic features
+# (gene_*_SYMBOL) + binary clinical label. Only patients with BOTH modalities
+# are kept (inner join on patient_id), so the effective cohort is small;
+# batch size and regularization are tuned accordingly.
+seed: 42
+device: cuda
+
+data:
+  name: tcga_brca
+  root: data/TCGA_BRCA
+  image_features: image_features.csv
+  gene_features: genomic_features.csv
+  labels: labels.csv
+  clinical: clinical.csv
+  splits: splits.csv
+  use_clinical: false
+  normalize: standard
+  split_ratios: [0.7, 0.15, 0.15]
+  gene_pca:
+    enabled: true              # 200 RNA-seq genes -> compact PCA latent target
+    n_components: 64
+
+task:
+  type: binary
+  num_classes: 2
+
+model:
+  image_encoder:
+    hidden_dims: [512, 256]
+    latent_dim: 128
+    dropout: 0.3
+    mil: false
+  gene_encoder:
+    type: mlp
+    hidden_dims: [256, 128]
+    latent_dim: 128
+    dropout: 0.3
+  target:
+    gene_target_type: pca      # PCA-reduced gene latent target (reproducible)
+    target_dim: 64
+    ema: true
+    ema_decay: 0.996
+  predictor:
+    type: diffusion
+    hidden_dim: 256
+    residual: true
+    timesteps: 1000
+    sample_steps: 8
+    depth: 3
+    n_uncertainty_samples: 8
+    masked_jepa: true
+    mask_ratio: 0.5
+  fusion:
+    mode: uncertainty_gated
+    hidden_dim: 256
+    dropout: 0.4
+
+jepa:
+  distance: cosine
+
+loss:
+  lambda_img2gene: 1.0
+  lambda_gene2img: 1.0
+  lambda_masked_jepa: 0.5
+  lambda_align: 0.1
+  lambda_cls: 1.0
+  use_contrastive: true
+  contrastive_temp: 0.1
+
+train:
+  epochs: 150
+  batch_size: 32
+  lr: 0.0005
+  weight_decay: 0.0005
+  scheduler: cosine
+  warmup_epochs: 10
+  amp: true
+  num_workers: 4
+  patience: 40
+
+downstream:
+  mode: finetune
+  epochs: 100
+  lr: 0.0003
+  weight_decay: 0.0005

@@ -1,0 +1,12 @@
+# JPathGene dependencies.
+# The Singularity image (pytorch_24.02.sif) already ships torch/torchvision/numpy.
+# Anything else is installed into PYTHONUSERBASE inside the container.
+torch>=2.0
+numpy>=1.23
+pandas>=1.5
+scikit-learn>=1.1
+PyYAML>=6.0
+matplotlib>=3.5
+tqdm>=4.64
+# Optional (figures only): UMAP for embedding plots. Falls back to t-SNE/PCA.
+umap-learn>=0.5 ; python_version >= "3.8"

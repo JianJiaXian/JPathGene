@@ -1,0 +1,24 @@
+\begin{abstract}
+Integrating histopathology with genetic/omics tabular data is central to
+computational oncology, yet most multimodal models simply concatenate image and gene
+features and never learn the biological correspondence between them. We introduce
+\textbf{JPathGene}, a cross-modal joint-embedding predictive framework that formulates
+image--genetic fusion as latent prediction. A single predictor unifies within-modality
+masked prediction (I-JEPA) and cross-modal prediction; because one tissue phenotype is
+compatible with a distribution of genetic programs, a conditional latent-diffusion
+predictor models that distribution (deterministic JEPA being its single-step limit)
+and yields a per-patient cross-modal uncertainty. \textbf{CoRE-Fusion} uses that
+uncertainty to gate an image expert that corrects a genomic anchor, weighting
+histology by its cross-modal reliability, without decoding raw expression. On a leakage-safe
+TCGA-BRCA benchmark with UNI2-h features, JPathGene achieves the highest multimodal AUC: it
+ties a strong but over-confident gene-only baseline on AUC while being significantly
+better calibrated ($p\!<\!0.001$) and best on proper scoring rules. On TCGA-LUAD, CoRE
+significantly beats gene-only on both AUC and calibration on a molecular endpoint,
+while on a non-saturated anatomic stage endpoint fusion adds large discrimination
+($+0.07$ to $+0.11$ AUC). The benefit is thus contingent on feature quality and on
+whether genomics already saturates the endpoint. All code, data, and models will be
+publicly available in our official repository: \url{[github url]}.
+\keywords{Histopathology--genomics fusion \and Latent diffusion
+\and Cross-modal prediction \and Uncertainty-guided fusion
+\and Computational pathology}
+\end{abstract}

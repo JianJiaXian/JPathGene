@@ -1,0 +1,74 @@
+% JPathGene — MICCAI 2026 MULTITAB Workshop (Multimodal Learning with
+% Medical Tabular Data). Springer LNCS style.
+% Build: pdflatex main && bibtex main && pdflatex main && pdflatex main
+\documentclass[runningheads]{llncs}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath,amssymb}
+\usepackage{amsfonts}
+\usepackage{multirow}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage{placeins}
+\usepackage[hidelinks]{hyperref}
+
+\setlength{\textfloatsep}{10pt plus 2pt minus 2pt}
+\setlength{\floatsep}{8pt plus 2pt minus 2pt}
+\setlength{\intextsep}{8pt plus 2pt minus 2pt}
+
+\newcommand{\zimg}{\mathbf{z}_{\mathrm{img}}}
+\newcommand{\zgene}{\mathbf{z}_{\mathrm{gene}}}
+
+\graphicspath{{figures/}}
+
+\begin{document}
+
+\title{JPathGene: Cross-Modal Latent Diffusion Predictive Learning
+between Histopathology Images and Genetic Profiles}
+\titlerunning{JPathGene: Diffusion-JEPA for Image--Genetic Fusion}
+
+\author{Jia-Xian Jian\inst{1} \and
+Wei-Chieh Sun\inst{2} \and
+Shih-Chih Lin\inst{3} \and
+Fang-Yi Lin\inst{1} \and
+YunTung Chu\inst{2} \and
+Jenq-Neng Hwang\inst{2} \and
+Pau-Choo Chung\inst{1}}
+\authorrunning{J.-X. Jian et al.}
+\institute{Department of Electrical Engineering, National Cheng Kung University,
+Tainan, Taiwan\\
+\email{n28101173@gs.ncku.edu.tw, n28111518@gs.ncku.edu.tw, pcchung@ee.ncku.edu.tw}
+\and
+Department of Electrical and Computer Engineering, University of Washington,
+Seattle, WA, USA\\
+\email{wsun12@uw.edu, yuntungc@uw.edu, hwang@uw.edu}
+\and
+International Intercollegiate Ph.D.\ Program, National Tsing Hua University,
+Hsinchu, Taiwan\\
+\email{leolin65@gapp.nthu.edu.tw}}
+
+\maketitle
+
+\input{sections/abstract}
+
+\input{sections/introduction}
+\input{sections/method}
+\input{sections/experiments}
+\input{sections/results}
+\input{sections/conclusion}
+
+\FloatBarrier
+
+\begin{credits}
+\subsubsection{\discintname}
+The authors have no competing interests to declare that are relevant to the content
+of this article.
+\end{credits}
+
+\bibliographystyle{splncs04}
+\bibliography{references}
+
+\end{document}

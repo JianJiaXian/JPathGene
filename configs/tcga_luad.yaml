@@ -1,0 +1,83 @@
+# JPathGene — TCGA-LUAD feature-level configuration (template).
+# LUAD CSVs are not yet downloaded in this environment; see data/README.md for
+# preparation instructions. Once data/TCGA_LUAD
+# contains image_features.csv / genomic_features.csv / labels.csv this config is
+# runnable with the same commands as TCGA-BRCA.
+seed: 42
+device: cuda
+
+data:
+  name: tcga_luad
+  root: data/TCGA_LUAD
+  image_features: image_features.csv
+  gene_features: genomic_features.csv
+  labels: labels.csv
+  clinical: clinical.csv
+  splits: splits.csv
+  use_clinical: false
+  normalize: standard
+  split_ratios: [0.7, 0.15, 0.15]
+  gene_pca:
+    enabled: true
+    n_components: 64
+
+task:
+  type: binary
+  num_classes: 2
+
+model:
+  image_encoder:
+    hidden_dims: [512, 256]
+    latent_dim: 128
+    dropout: 0.3
+    mil: false
+  gene_encoder:
+    type: mlp
+    hidden_dims: [256, 128]
+    latent_dim: 128
+    dropout: 0.3
+  target:
+    gene_target_type: pca
+    target_dim: 64
+    ema: true
+    ema_decay: 0.996
+  predictor:
+    type: diffusion
+    hidden_dim: 256
+    residual: true
+    timesteps: 1000
+    sample_steps: 8
+    depth: 3
+    n_uncertainty_samples: 8
+  fusion:
+    mode: uncertainty_gated
+    hidden_dim: 256
+    dropout: 0.4
+
+jepa:
+  distance: cosine
+
+loss:
+  lambda_img2gene: 1.0
+  lambda_gene2img: 1.0
+  lambda_align: 0.1
+  lambda_cls: 1.0
+  use_contrastive: true
+  contrastive_temp: 0.1
+
+train:
+  epochs: 150
+  batch_size: 32
+  lr: 0.0005
+  weight_decay: 0.0005
+  scheduler: cosine
+  warmup_epochs: 10
+  amp: true
+  num_workers: 4
+  patience: 40
+
+downstream:
+  mode: finetune
+  epochs: 100
+  lr: 0.0003
+  weight_decay: 0.0005

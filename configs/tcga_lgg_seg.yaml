@@ -1,0 +1,29 @@
+# TCGA-LGG radiogenomic segmentation (Buda et al. brain-MRI).
+# Gene-conditioned U-Net: genomics conditions segmentation via FiLM; with
+# gene_mode=jepa the genetic latent is imputed from the image so genomics is
+# optional at test time.
+seed: 42
+device: cuda
+
+data:
+  name: tcga_lgg
+  root: data/TCGA_LGG_raw
+  image_size: 256
+  split_ratios: [0.7, 0.15, 0.15]   # by patient (no slice leakage)
+
+model:
+  base: 32            # backbone base channel width
+  gene_latent: 128    # genetic embedding dim (FiLM conditioning)
+  dropout: 0.2
+  sample_steps: 25    # DDIM steps for the diffusion-based segmenter (diffseg)
+
+train:
+  epochs: 40
+  batch_size: 16
+  lr: 0.001
+  weight_decay: 0.0001
+  num_workers: 8
+  amp: true
+  patience: 12
+  gene_mode: jepa     # none | true | jepa
+  lambda_jepa: 1.0    # image->gene imputation (JEPA) loss weight

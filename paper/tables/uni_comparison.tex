@@ -1,0 +1,31 @@
+\begin{table}[t]
+\centering
+\caption{TCGA-BRCA comparison using UNI2-h features and leakage-safe
+5-fold$\times$5-seed CV (mean$\pm$std). Best AUC and ECE are bold.}
+\label{tab:uni_compare}
+\begin{tabular}{lccc}
+\toprule
+Method & AUC\,$\uparrow$ & F1\,$\uparrow$ & ECE\,$\downarrow$ \\
+\midrule
+\multicolumn{4}{l}{\emph{Unimodal}}\\
+Gene-only & \textbf{0.954\,$\pm$\,0.018} & 0.748\,$\pm$\,0.066 & 0.229\,$\pm$\,0.024 \\
+Image-only & 0.775\,$\pm$\,0.025 & 0.367\,$\pm$\,0.210 & 0.104\,$\pm$\,0.010 \\
+\midrule
+\multicolumn{4}{l}{\emph{Multimodal fusion baselines}}\\
+Concat fusion & 0.928\,$\pm$\,0.033 & 0.392\,$\pm$\,0.127 & 0.088\,$\pm$\,0.027 \\
+Contrastive (CLIP-style) & 0.927\,$\pm$\,0.052 & 0.436\,$\pm$\,0.203 & 0.081\,$\pm$\,0.023 \\
+Late fusion & 0.917\,$\pm$\,0.037 & 0.534\,$\pm$\,0.165 & 0.079\,$\pm$\,0.022 \\
+Early fusion & 0.915\,$\pm$\,0.044 & 0.683\,$\pm$\,0.080 & 0.099\,$\pm$\,0.029 \\
+Cross-attention & 0.910\,$\pm$\,0.037 & 0.470\,$\pm$\,0.109 & 0.078\,$\pm$\,0.014 \\
+Gated fusion & 0.890\,$\pm$\,0.042 & 0.515\,$\pm$\,0.093 & 0.087\,$\pm$\,0.017 \\
+TabTransformer concat & 0.807\,$\pm$\,0.024 & 0.497\,$\pm$\,0.062 & 0.119\,$\pm$\,0.027 \\
+\midrule
+\multicolumn{4}{l}{\emph{JPathGene (ours)}}\\
+\textbf{Full} & \textbf{0.954\,$\pm$\,0.010} & 0.602\,$\pm$\,0.122 & 0.094\,$\pm$\,0.033 \\
+\textbf{CoRE} & 0.953\,$\pm$\,0.016 & 0.743\,$\pm$\,0.034 & 0.190\,$\pm$\,0.039 \\
+\textbf{MLP predictor} & 0.941\,$\pm$\,0.022 & 0.466\,$\pm$\,0.125 & 0.080\,$\pm$\,0.021 \\
+\textbf{Diffusion (PCA)} & 0.916\,$\pm$\,0.046 & 0.593\,$\pm$\,0.132 & \textbf{0.071\,$\pm$\,0.020} \\
+\textbf{Full (diff.+pathway)} & 0.882\,$\pm$\,0.041 & 0.495\,$\pm$\,0.110 & 0.076\,$\pm$\,0.013 \\
+\bottomrule
+\end{tabular}
+\end{table}

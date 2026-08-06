@@ -1,0 +1,81 @@
+data:
+  clinical: clinical.csv
+  gene_features: genomic_features.csv
+  gene_pca:
+    enabled: false
+    n_components: 64
+  image_features: image_features.csv
+  labels: labels.csv
+  name: tcga_luad_uni
+  normalize: standard
+  root: data/TCGA_LUAD_UNI
+  split_ratios:
+  - 0.7
+  - 0.15
+  - 0.15
+  splits: splits.csv
+  use_clinical: false
+device: cuda
+downstream:
+  epochs: 100
+  lr: 0.0003
+  mode: finetune
+  weight_decay: 0.0005
+jepa:
+  distance: cosine
+loss:
+  contrastive_temp: 0.1
+  lambda_align: 0.1
+  lambda_cls: 1.0
+  lambda_gene2img: 1.0
+  lambda_img2gene: 1.0
+  lambda_masked_jepa: 0.5
+  use_contrastive: true
+model:
+  fusion:
+    dropout: 0.4
+    hidden_dim: 256
+    mode: uncertainty_gated
+  gene_encoder:
+    dropout: 0.3
+    hidden_dims:
+    - 256
+    - 128
+    latent_dim: 128
+    type: mlp
+  image_encoder:
+    dropout: 0.3
+    hidden_dims:
+    - 512
+    - 256
+    latent_dim: 128
+    mil: false
+  predictor:
+    depth: 3
+    hidden_dim: 256
+    mask_ratio: 0.5
+    masked_jepa: true
+    n_uncertainty_samples: 8
+    residual: true
+    sample_steps: 8
+    timesteps: 1000
+    type: diffusion
+  target:
+    ema: true
+    ema_decay: 0.996
+    gene_target_type: learned
+    target_dim: 64
+seed: 42
+task:
+  num_classes: 2
+  type: binary
+train:
+  amp: true
+  batch_size: 32
+  epochs: 150
+  lr: 0.0005
+  num_workers: 4
+  patience: 40
+  scheduler: cosine
+  warmup_epochs: 10
+  weight_decay: 0.0005
